@@ -38,7 +38,7 @@ public class Employee extends StaffMember {
 
     @Override
     double pay() {
-        return
+        return 0;
     }
 
 
