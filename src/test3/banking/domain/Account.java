@@ -1,6 +1,6 @@
 package test3.banking.domain;
 
-abstract class Account {
+public abstract class Account {
     private double balance; //余额
 
     public Account(double balance) {

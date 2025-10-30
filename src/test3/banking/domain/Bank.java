@@ -1,28 +1,33 @@
 package test3.banking.domain;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class Bank extends TestBanking{
     private List<Customer> customers;
 
-    public Bank(List<Customer> customers) {
-        this.customers = customers;
+    public Bank() {
+        this.customers = new ArrayList<>();
     }
 
-    public List<Customer> getCustomers() {
-        return customers;
+    public Bank(List<Customer> customers) {
+        this.customers = customers;
     }
 
     public void addCustomer(Customer customer) {
         customers.add(customer);
     }
 
-    public int getNumOfCustomer() {
+    public Customer getCustomer(int index) {
+        return customers.get(index);
+    }
+
+    public int getNumOfCustomers() {
         return customers.size();
     }
 
-    public Iterator<Customer> getCustomer() {
+    public Iterator<Customer> getCustomers() {
         return customers.iterator();
     }
 }

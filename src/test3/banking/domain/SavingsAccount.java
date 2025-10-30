@@ -17,6 +17,10 @@ public class SavingsAccount extends Account {
     }
 
     @Override
-    public void withdraw(double amount) {
+    public void withdraw(double amount) throws OverdraftExpection {
+        if (amount > getBalance()) {
+            throw new OverdraftExpection("out of money");
+        }
+        setBalance(getBalance() - amount);
     }
 }
