@@ -1,9 +1,6 @@
-package test3.banking.domain;
+package ja.test3.domain;
 
-import test3.banking.report.CustomReport;
-
-import java.util.ArrayList;
-import java.util.List;
+import ja.test3.report.CustomReport;
 
 public class TestBanking {
     public static void main(String[] args) {

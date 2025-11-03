@@ -1,4 +1,4 @@
-package test3.banking.domain;
+package ja.test3.domain;
 
 public class CheckingAccount extends Account {
     private boolean canOverdraft;

@@ -1,7 +1,4 @@
-package test3.banking.domain;
-
-import java.io.IOException;
-import java.io.Serializable;
+package ja.test3.domain;
 
 public class OverdraftExpection extends RuntimeException {
 

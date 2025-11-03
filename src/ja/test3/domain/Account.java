@@ -1,4 +1,4 @@
-package test3.banking.domain;
+package ja.test3.domain;
 
 public abstract class Account {
     private double balance; //余额

@@ -1,4 +1,4 @@
-package test3.banking.domain;
+package ja.test3.domain;
 
 import java.util.ArrayList;
 import java.util.Iterator;

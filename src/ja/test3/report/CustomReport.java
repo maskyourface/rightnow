@@ -1,8 +1,7 @@
-package test3.banking.report;
+package ja.test3.report;
 
-import test3.banking.domain.*;
+import ja.test3.domain.*;
 import java.util.Iterator;
-import java.util.List;
 
 public class CustomReport extends TestBanking {
     public CustomReport() {
