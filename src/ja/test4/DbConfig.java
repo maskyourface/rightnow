@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 //配置链接mysql
 public class DbConfig {
-    public Connection dbConfig() throws SQLException{
+    public static Connection dbConfig() throws SQLException{
         //try-catch
         try{
             //链接jdbc
@@ -21,8 +21,9 @@ public class DbConfig {
             //打印日志
             e.printStackTrace();
         }
-
-        String url = "jdbc:mysql://39.107.192.129:3306/exps?useUnicode=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&autoReconnect=true";
+        //39.107.192.129:3306 是服务器
+        //test是数据库
+        String url = "jdbc:mysql://39.107.192.129:3306/test?useUnicode=false&serverTimezone=Asia/Shanghai&characterEncoding=utf8&autoReconnect=true";
         String user = "myq";
         String pass = "mmyq";
         Connection connection = DriverManager.getConnection(url, user, pass);

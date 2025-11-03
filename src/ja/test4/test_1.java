@@ -10,7 +10,7 @@ public class test_1 {
         String sql = "select * from sample";
         ResultSet rs = conn.createStatement().executeQuery(sql);
         while (rs.next()) {
-            System.out.println(rs.getString("sample_name"));
+            System.out.println(rs.getString("sample_time"));
 
         }
     }
