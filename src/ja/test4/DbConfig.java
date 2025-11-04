@@ -19,7 +19,7 @@ public class DbConfig {
             //链接失败
             System.out.println("Driver not found");
             //打印日志
-            e.printStackTrace();
+            //e.printStackTrace();
         }
         //39.107.192.129:3306 是服务器
         //test是数据库

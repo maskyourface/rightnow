@@ -1,5 +1,16 @@
 package ja.test4;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class TemperatureMonitor {
 //    程序二：温度监控程序
 //            功能要求
@@ -48,5 +59,92 @@ public class TemperatureMonitor {
 //    同时，检查最近1分钟的所有温度是否都超出阈值，如果是则报警。
 //
 //    然后清空列表，开始新的1分钟周期。
+    private static final Queue<Double> temperatures = new LinkedList<Double>();
+    private static final double MIN_TEMPERATURE = 18.0;
+    private static final double MAX_TEMPERATURE = 22.0;
+    private static boolean alarm = false;
 
+    public static void main(String[] args) {
+        System.out.println("Temperature Monitor begin");
+        System.out.println("温度阈值: [" + MIN_TEMPERATURE + "℃, " + MAX_TEMPERATURE + "℃]");
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        //每10秒显示实时温度
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                try {
+                    Double currentTemp = getTemperature();
+                    if(currentTemp != null) {
+                        temperatures.offer(currentTemp);
+                        if(temperatures.size() > 6){
+                            temperatures.poll();
+                        }
+                        System.out.println("[" + new java.util.Date() + "] 实时温度: " + currentTemp + "℃");
+                    }
+                }catch (Exception e) {
+                    System.err.println("获取实时温度失败: " + e.getMessage());
+                }
+            }
+        },0,10, TimeUnit.SECONDS);
+        //每10秒检查报警条件
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                try {
+                    checkTemperature();
+                }catch (Exception e) {
+                    System.err.println("检查报警条件失败: " + e.getMessage());
+                }
+            }
+        },0,10, TimeUnit.SECONDS);
+        //每1分钟显示平均温度
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                try {
+                    if(!temperatures.isEmpty()){
+                        double average = avg();
+                        System.out.println("[" + new java.util.Date() + "] 最近1分钟平均温度: " +
+                                String.format("%.2f", average) + "℃");
+                    }
+                }catch (Exception e) {
+                    System.err.println("计算平均温度失败: " + e.getMessage());
+                }
+            }
+        },60,60, TimeUnit.SECONDS);
+
+    }
+    //获取最新温度
+    private static Double getTemperature() {
+        String sql = "SELECT sample_data FROM sample ORDER BY sample_time DESC";
+        try(Connection conn = DbConfig.dbConfig();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql)) {
+            if(rs.next()) {
+                return rs.getDouble("sample_data");
+            }
+        } catch (SQLException e) {
+            System.err.println("查询最新温度失败: " + e.getMessage());
+        }
+        return null;
+    }
+
+    //计算平均温度
+    private static double avg(){
+        return temperatures.stream().mapToDouble(Double::doubleValue).average().orElse(0.0);
+    }
+
+    //检查报警条件
+    private static void checkTemperature() {
+        if(temperatures.size() < 6){
+            return ;
+        }
+        boolean a = temperatures.stream().allMatch(temp -> temp > MIN_TEMPERATURE && temp < MAX_TEMPERATURE);
+        if (a && !alarm) {
+            alarm = true;
+            System.out.println("报警！温度连续1分钟超出阈值范围 [" +
+                    MIN_TEMPERATURE + "℃, " + MAX_TEMPERATURE + "℃]");
+            System.out.println("最近1分钟温度记录: " + temperatures);
+        } else if (!a && alarm) {
+            alarm = false;
+            System.out.println("报警解除！温度恢复正常范围");
+        }
+    }
 }

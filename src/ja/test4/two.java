@@ -90,7 +90,7 @@ public class two {
         }
 
         boolean allOutOfRange = temperatureHistory.stream()
-                .allMatch(temp -> temp < MIN_THRESHOLD || temp > MAX_THRESHOLD);
+                    .allMatch(temp -> temp < MIN_THRESHOLD || temp > MAX_THRESHOLD);
 
         if (allOutOfRange && !alarmTriggered) {
             alarmTriggered = true;

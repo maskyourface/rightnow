@@ -1,5 +1,13 @@
 package ja.test4;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class TemperatureSensor {
 //    功能要求
 //
@@ -47,4 +55,42 @@ public class TemperatureSensor {
 //    温度生成：使用Random.nextDouble()生成0到1之间的随机数，然后转换为15到25之间的数。
 //
 //    存储方法：使用PreparedStatement来执行INSERT语句。
+
+    private static final Random rand = new Random();
+
+    public static void main(String[] args) {
+        System.out.println("Temperature Sensor begin");
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    double temperature = random_temperateness();
+                    save(temperature);
+                    System.out.println("[" + new java.util.Date() + "] 采集温度: " + temperature + "℃");
+
+                }catch (Exception e){
+                    System.err.println("温度采集失败:" + e.getMessage());
+                }
+            }
+        },0,10, TimeUnit.SECONDS);
+
+    }
+
+    private static double random_temperateness() {
+        return 15 + rand.nextDouble() * 10;
+    }
+
+    private static void save(double temp) {
+        String sql = "INSERT INTO sample(sample_time, sample_data) VALUES (NOW(), ?)";
+        try(Connection conn = DbConfig.dbConfig();
+            //预编译防止sql注入
+        PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setDouble(1, temp);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("保存失败",e);
+        }
+    }
 }
