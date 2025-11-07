@@ -61,8 +61,8 @@ public class test {
         // 4. 收集叶子节点（即原始符号）的编码结果
         List<HuffmanNode> result = getLeafNodes(root);
 
-        // 5. 按概率排序显示结果
-        Collections.sort(result, (a, b) -> Double.compare(b.probability, a.probability));
+        // 5. 排序
+        //Collections.sort(result, (a, b) -> Double.compare(b.probability, a.probability));
 
         // 6. 显示编码结果
         printResults(result);

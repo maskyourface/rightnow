@@ -42,10 +42,22 @@ public class mytest {
 
     public static List<symbolh>  createsymbol(){
         List<symbolh> list=new ArrayList<symbolh>();
-        list.add(new symbolh("x1",1.0/2));
-        list.add(new symbolh("x2",1.0/4));
-        list.add(new symbolh("x3",1.0/8));
-        list.add(new symbolh("x4",1.0/8));
+
+//        list.add(new symbolh("x1",1.0/2));
+//        list.add(new symbolh("x2",1.0/4));
+//        list.add(new symbolh("x3",1.0/8));
+//        list.add(new symbolh("x4",1.0/8));
+
+        Collections.addAll(list,
+                new symbolh("u1",0.15),
+                new symbolh("u2",0.25),
+                new symbolh("u3",0.20),
+                new symbolh("u4",0.25),
+                new symbolh("u5",0.05),
+                new symbolh("u6",0.10)
+                );
+
+
 
         System.out.println("步骤1：创建信源符号");
         System.out.println("符号\t概率");
